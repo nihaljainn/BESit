@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { authorize } from '../../utils/authorize'
 import { connect } from 'react-redux';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { logInUser } from './../../actions/userActions';
 
 class LogIn extends Component {
     state = {
@@ -28,7 +29,7 @@ class LogIn extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/api/login', {
+        axios.post('/api/login', {
             username: e.target[0].value,
             password: e.target[1].value
         })
@@ -52,7 +53,6 @@ class LogIn extends Component {
     }
 
     render() {
-
         let msgBlock = this.props.location.state && this.props.location.state.success ? (
             <div className="alert alert-success">
                 <strong>Success: </strong> {this.props.location.state.msg}
@@ -92,18 +92,13 @@ class LogIn extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-
-    }; // nothing needed from redux store
-}
 
 const mapDispatchToProps = (dispatch) => {
     return {
         logInUser: (user) => {
-            dispatch({ type: 'LOGIN_USER', user: user }); // calling a dispatch action
+            dispatch(logInUser(user)); // calling a dispatch action
         }
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogIn);
+export default connect(null, mapDispatchToProps)(LogIn);

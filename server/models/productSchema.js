@@ -10,9 +10,22 @@ const productSchema = new Schema({
     desc: String,
     rating: String,
     timestamp: Date, 
-    status: String
+    status: String,
+    imageIsAvailable: Boolean,
+    fileNames: Array,
+    interestedUsers: Array
 });
 
 let Product = mongoose.model('products', productSchema);
+
+const db = mongoose.connection;
+const collection = db.collection('products');
+
+// Creating text index for search
+collection.createIndex({ 
+    name: "text",
+    desc: "text"
+});
+
 
 module.exports = Product;
