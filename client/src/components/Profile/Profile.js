@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { authorize } from '../../utils/authorize';
 import axios from 'axios';
 import { logOutUser, logInUser } from './../../actions/userActions';
-import HomeNav from '../HomeNav/HomeNav';
 
 class Profile extends Component {
   state = {
@@ -47,10 +46,10 @@ class Profile extends Component {
       username: e.target[0].value,
       fname: e.target[1].value,
       phoneno: e.target[2].value,
-      password: e.target[3].value,
+      password:this.state.user.password
     };
     axios.post('/api/updateuser', user)
-      .then(res => res.data)
+      .then(res => res.data)//res is response sent from api
       .then(json => {
         if (json.success) {
           console.log("successful");
@@ -59,7 +58,7 @@ class Profile extends Component {
           });
           localStorage.removeItem('access_token');
           this.props.logOutUser();
-          this.props.history.push('/', { success: true, msg: 'Updated Successfully!' });
+          window.location = '/';//this.history,location,match only if higher order component here profile doent have any router
         }
         else {
           let errs = json.errors.map((error) => {
@@ -88,10 +87,14 @@ class Profile extends Component {
     })) : '';
     return (
       <div className="profile">
-        <HomeNav />
+        {/* <HomeNav /> */}
+        <div className="error">
+          {errBlock}
+        </div>
         <div id="profilecard">
-          <h1 id="profiletitle">YOUR PROFILE</h1>
+          <h1 id="profiletitle">Your Profile</h1>
           <form className="registerform" onSubmit={this.handleSubmit}>
+            
             <div className="form-group" id="prof1">
               <label htmlFor="Username" >UserName</label>
               <input type="text" className="form-control" name="username" aria-describedby="emailHelp" defaultValue={this.state.user.username} disabled />
@@ -107,19 +110,11 @@ class Profile extends Component {
               <input type="text" className="form-control" name="phoneno" aria-describedby="emailHelp" defaultValue={this.state.user.phoneno} />
             </div>
 
-            <div className="form-group" id="prof">
-              <label htmlFor="Password">Password</label>
-              <input type="password" className="form-control" name="password" defaultValue={this.state.user.password} disabled onClick={this.passChange}/>
-            </div>
-
             <div className="container-button" id="prof">
               <button type="submit" className="btn btn-primary" id="register-submit">Submit</button>
             </div>
 
           </form>
-        </div>
-        <div className="error">
-          {errBlock}
         </div>
       </div>
     )
@@ -143,4 +138,4 @@ const mapDispatchToProps = (dispatch) => {
     }
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)((Profile));

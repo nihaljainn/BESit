@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import './Dispuser.css';
+import './Product.css';
+
 class Dispuser extends Component {
   state = {
     Displayuser: null,
@@ -10,6 +11,7 @@ class Dispuser extends Component {
     phoneno: null,
     show: false
   }
+  
   componentDidMount() {
     this.setState({
       Displayuser: this.props.username,
@@ -27,24 +29,27 @@ class Dispuser extends Component {
       });
     })
   }
+
   handleShare = (e) => {
     this.setState({
       status: e.target.checked
     });
     this.props.shareStatus(e.target.checked, this.state.Displayuser);
   }
+
   render() {
     return (
-      <div className="card dispUser">
-        <div className="card-body dispUser">
-          <h4 className="card-title DispUsertitle" >@{this.state.Displayuser}</h4>
-
-          <div className="checkbox shareContact">
-            <label id='contactlabel'><input type="checkbox" aria-label="Checkbox" onClick={this.handleShare} defaultChecked={this.state.status} />Share contact info</label>
+      <div className="card">
+        <div className="card-body">
+          <div className="row">
+          <h4 className="card-title">@{this.state.Displayuser}</h4>
+            <div className="custom-control custom-checkbox my-1 mr-sm-2">
+              <input type="checkbox" className="custom-control-input" id={"customControlInline" + this.state.Displayuser + this.props.id} onClick={this.handleShare} defaultChecked={this.state.status} />
+              <label className="custom-control-label shareContact" htmlFor={"customControlInline" + this.state.Displayuser + this.props.id}>Share Contact</label>
+            </div>
           </div>
-
           <h2 className="card-text contact1">Buyer: <label id='contactlabel'> {this.state.name}</label></h2>
-          <h2 className="card-text contact2">Phone No: <label id='contactlabel'>{this.state.phoneno}</label></h2>
+          <h2 className="card-text">Phone No: <label id='contactlabel'>{this.state.phoneno}</label></h2>
         </div>
       </div>
     )
